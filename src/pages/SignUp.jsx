@@ -27,7 +27,8 @@ const SignUp = () => {
     firstName: '',
     lastName: '',
     email: '',
-    password: ''
+    password: '',
+    phoneNo: '' // Added based on your user model
   })
 
   // 2. Handle Input Changes
@@ -49,7 +50,7 @@ const SignUp = () => {
     console.log("Submitting Data:", formData)
     
     // 1. Axios call mein hi headers bhej sakte hain (waise Axios khud hi handle kar leta hai)
-    const res = await axios.post('/api/user/registeruser', formData)
+    const res = await axios.post('/api/user/registeruser', formData, { withCredentials: true })
     
     console.log(res.data) // Check karein backend se kya aa raha hai
 
@@ -116,6 +117,19 @@ const SignUp = () => {
                   type="text"
                   placeholder="Gupta"
                   value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+
+              <div className="grid gap-2">
+                <Label htmlFor="phoneNo">Phone Number</Label>
+                <Input
+                  id="phoneNo"
+                  name="phoneNo"
+                  type="text"
+                  placeholder="1234567890"
+                  value={formData.phoneNo}
                   onChange={handleChange}
                   required
                 />

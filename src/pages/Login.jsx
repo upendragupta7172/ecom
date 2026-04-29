@@ -63,9 +63,9 @@ const handleSubmit = async (e) => {
       navigate('/');
     }
   } catch (error) {
-    // 404 error check karne ke liye log lagayein
-    console.log("Error details:", error.response);
-    toast.error(error.response?.data?.message || "Login failed - Route not found");
+    console.error("Login Error Response:", error.response?.data);
+    const errorMessage = error.response?.data?.message || error.response?.data?.error || "Login failed";
+    toast.error(errorMessage);
   } finally {
     setLoading(false);
   }
