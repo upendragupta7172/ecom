@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://ecombackend-x3cl.onrender.com",
+  baseURL: "https://ecombackend-6lm3.onrender.com",
   withCredentials: true,
 });
 
