@@ -59,7 +59,7 @@ const SignUp = () => {
       toast.success(res.data.message || "Signup Successful!")
       
       // 3. Navigation (Spelling check: Varify ya Verify?)
-      navigate('/api/user/varify') 
+      navigate('/api/user/verify') 
     } else {
       toast.error(res.data.message || "Kuch galti hui")
     }
