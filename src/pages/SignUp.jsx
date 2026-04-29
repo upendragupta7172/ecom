@@ -57,9 +57,8 @@ const SignUp = () => {
 
     if (res.data.success) {
       toast.success(res.data.message || "Signup Successful!")
-      
-      // 3. Navigation (Spelling check: Varify ya Verify?)
-      navigate('/api/user/verify') 
+      // Redirect to the frontend route that shows the "Check your email" message
+      navigate('/verify') 
     } else {
       toast.error(res.data.message || "Kuch galti hui")
     }
