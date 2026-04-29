@@ -1,6 +1,7 @@
 import React from 'react';
 import { CheckCircle, Download, ShoppingBag } from 'lucide-react';
 import { useLocation, useNavigate } from 'react-router-dom';
+        import axios from "@/api/axios";
 
 const OrderSuccess = () => {
   const location = useLocation();
@@ -9,7 +10,7 @@ const OrderSuccess = () => {
 
   const downloadInvoice = () => {
     // Backend API trigger karein
-    window.open(`https://ecombackend-8yfl.onrender.com/api/v1/payment/invoice/${orderId}`, "_blank");
+    window.open(`/api/v1/payment/invoice/${orderId}`, "_blank");
   };
 
   return (

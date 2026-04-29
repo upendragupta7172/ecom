@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "@/api/axios";
 import { useParams } from "react-router-dom";
 
 const OrderDetails = () => {
@@ -9,7 +9,7 @@ const OrderDetails = () => {
   const fetchOrder = async () => {
     try {
       const res = await axios.get(
-        `https://ecombackend-8yfl.onrender.com/api/v1/orders/${id}`,
+        `/api/v1/orders/${id}`,
         { 
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           withCredentials: true 

@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeOff, Loader2 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import axios from "@/api/axios";
 import { toast } from 'sonner'
 import { useDispatch } from 'react-redux'
 import { setUser } from '@/redux/userSlice'
@@ -48,7 +48,7 @@ const handleSubmit = async (e) => {
   setLoading(true);
 
   try {
-    const res = await axios.post('https://ecombackend-8yfl.onrender.com/api/user/login', formData, { 
+    const res = await axios.post('/api/user/login', formData, { 
       headers: { "Content-Type": "application/json" },
       withCredentials: true
     });

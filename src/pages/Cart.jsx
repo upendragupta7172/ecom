@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import axios from "@/api/axios";
 import { setCart } from "@/redux/cartSlice";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -19,7 +19,7 @@ const Cart = () => {
   const [discount, setDiscount] = useState(0);
   const [appliedCode, setAppliedCode] = useState("");
 
-  const API_URL = "https://ecombackend-8yfl.onrender.com/api/v1/cart";
+  const API_URL = "/api/v1/cart";
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     withCredentials: true,

@@ -1,7 +1,7 @@
 // aaj
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "@/api/axios";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/userSlice";
@@ -58,8 +58,7 @@ const AccountSettings = () => {
       setLoading(true);
 
       const res = await axios.put(
-        "https://ecombackend-8yfl.onrender.com/api/user/profile/update",
-        // "/api/user/profile/update",
+        "/api/user/profile/update",
 
         {
           name: form.name,

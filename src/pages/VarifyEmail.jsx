@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from "@/api/axios";
 import { useNavigate, useParams } from 'react-router-dom';
 
 const VarifyEmail = () => {
@@ -10,7 +10,7 @@ const VarifyEmail = () => {
 
   const varifyEmail = async () => {
     try {
-      const res = await axios.post('https://ecombackend-8yfl.onrender.com/api/user/varify', {}, {
+      const res = await axios.post('/api/user/varify', {}, {
         headers: {
           Authorization: `Bearer ${token}`
         }

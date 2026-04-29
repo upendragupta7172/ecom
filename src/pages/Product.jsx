@@ -1,7 +1,7 @@
 
 import Filtersidebar from '@/components/Filtersidebar'
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import axios from "@/api/axios";
 import Productcard from '@/components/Productcard'
 import { useDispatch, useSelector } from 'react-redux'
 import { setProducts } from '@/redux/productSlice'
@@ -23,7 +23,7 @@ const Product = () => {
   const getProducts = async () => {
     try {
       setLoading(true)
-      const res = await axios.get("https://ecombackend-8yfl.onrender.com/api/user/product/getallproducts")
+      const res = await axios.get("/api/user/product/getallproducts")
 
       if (res.data?.products) {
         dispatch(setProducts(res.data.products))

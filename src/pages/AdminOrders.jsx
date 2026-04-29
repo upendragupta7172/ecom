@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "@/api/axios";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +22,7 @@ const AdminOrders = () => {
             }
 
             const res = await axios.get( // Ensure this is the correct URL for your local backend
-                "https://ecombackend-8yfl.onrender.com/api/v1/orders/admin/all", // Use relative path for deployment
+                "/api/v1/orders/admin/all", // Use relative path for deployment
                 {
                     headers: { Authorization: `Bearer ${token}` }, // Attach the token here
                     withCredentials: true // Important if your backend uses cookies for session management

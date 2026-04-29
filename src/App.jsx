@@ -9,12 +9,8 @@
 // new
 
 import React, { useEffect } from 'react';
-import axios from "axios";
-
-axios.defaults.baseURL = "https://ecombackend-8yfl.onrender.com";
-axios.defaults.withCredentials = true;
+import axios from "@/api/axios";
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setCart } from './redux/cartSlice';
 import Navbar from './components/Navbar';
@@ -91,7 +87,7 @@ const App = () => {
         const token = localStorage.getItem('token');
         if (token) {
           // Token ko header mein bhej rahe hain kyunki isAuthenticated middleware check karta hai
-          const res = await axios.get('https://ecombackend-8yfl.onrender.com/api/v1/cart/get', {
+          const res = await axios.get('/api/v1/cart/get', {
             headers: { "Authorization": `Bearer ${token}` }
           });
           if (res.data.success) dispatch(setCart(res.data.items || []));

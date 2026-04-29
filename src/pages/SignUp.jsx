@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Eye, EyeOff, Loader2 } from 'lucide-react' // Loader2 for loading state
 import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import axios from "@/api/axios";
 import { toast } from 'sonner'
 
 const SignUp = () => {
@@ -49,7 +49,7 @@ const SignUp = () => {
     console.log("Submitting Data:", formData)
     
     // 1. Axios call mein hi headers bhej sakte hain (waise Axios khud hi handle kar leta hai)
-    const res = await axios.post('https://ecombackend-8yfl.onrender.com/api/user/registeruser', formData)
+    const res = await axios.post('/api/user/registeruser', formData)
     
     console.log(res.data) // Check karein backend se kya aa raha hai
 
@@ -59,7 +59,7 @@ const SignUp = () => {
       toast.success(res.data.message || "Signup Successful!")
       
       // 3. Navigation (Spelling check: Varify ya Verify?)
-      navigate('https://ecombackend-8yfl.onrender.com/api/user/verify') 
+      navigate('/api/user/verify') 
     } else {
       toast.error(res.data.message || "Kuch galti hui")
     }

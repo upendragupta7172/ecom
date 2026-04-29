@@ -6,7 +6,7 @@ import Stepper from '../components/Stepper';
 import { Button } from '@/components/ui/button';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from "@/api/axios";
 import { toast } from 'sonner';
 
 const Payment = () => {
@@ -34,7 +34,7 @@ const Payment = () => {
       };
 
       // 1. Backend se Razorpay Order ID mangwayein
-      const { data } = await axios.post('https://ecombackend-8yfl.onrender.com/api/v1/payment/checkout', {
+      const { data } = await axios.post('/api/v1/payment/checkout', {
         amount: totalAmount
       }, config);
 
@@ -65,7 +65,7 @@ const Payment = () => {
               }
             };
 
-            const res = await axios.post('https://ecombackend-8yfl.onrender.com/api/v1/payment/verify', verifyData, config);
+            const res = await axios.post('/api/v1/payment/verify', verifyData, config);
             
             if (res.data.success) {
               toast.success("Order Placed Successfully! 🎉");

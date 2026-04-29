@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "@/api/axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 const MyOrders = () => {
@@ -9,7 +9,7 @@ const MyOrders = () => {
     const fetchOrders = async () => {
         try {
             const res = await axios.get(
-                "https://ecombackend-8yfl.onrender.com/api/user/my",
+                "/api/user/my",
                 { 
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                     withCredentials: true 
@@ -28,7 +28,7 @@ const MyOrders = () => {
     const cancelOrder = async (id) => {
   try {
     const res = await axios.put(
-      `https://ecombackend-8yfl.onrender.com/api/v1/orders/cancel/${id}`,
+      `/api/v1/orders/cancel/${id}`,
       {},
       { 
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
