@@ -9,8 +9,9 @@
 // new
 
 import React, { useEffect } from 'react';
-// App.jsx ke top par imports ke baad add karein
-// axios.defaults.baseURL = 'https://ecommerce-backend-wdhq.onrender.com'; // Aapka live backend URL
+import axios from "axios";
+
+axios.defaults.baseURL = "https://ecombackend-8yfl.onrender.com";
 axios.defaults.withCredentials = true;
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import axios from 'axios';
@@ -78,28 +79,6 @@ const router = createBrowserRouter([
   { path: '/varify', element: <Varify /> },
   { path: '/varify/:token', element: <VarifyEmail /> },
 ]);
-
-// const App = () => {
-//   const dispatch = useDispatch();
-//   useEffect(() => {
-//     const fetchInitialCart = async () => {
-//       try {
-//         const token = localStorage.getItem('token');
-//         if (token) {
-//           const res = await axios.get('/api/v1/cart/get', {
-//             headers: { "Authorization": `Bearer ${token}` },
-//             withCredentials: true
-//           });
-//           if (res.data.success) dispatch(setCart(res.data.items || []));
-//         }
-//       } catch (error) { console.error("Cart fetch error:", error); }
-//     };
-//     fetchInitialCart();
-//   }, [dispatch]);
-
-//   return <RouterProvider router={router} />;
-// };
-
 
 
 
