@@ -49,7 +49,7 @@ const SignUp = () => {
     console.log("Submitting Data:", formData)
     
     // 1. Axios call mein hi headers bhej sakte hain (waise Axios khud hi handle kar leta hai)
-    const res = await axios.post('http://localhost:5000/api/user/registeruser', formData)
+    const res = await axios.post('https://ecombackend-8yfl.onrender.com/api/user/registeruser', formData)
     
     console.log(res.data) // Check karein backend se kya aa raha hai
 
@@ -59,7 +59,7 @@ const SignUp = () => {
       toast.success(res.data.message || "Signup Successful!")
       
       // 3. Navigation (Spelling check: Varify ya Verify?)
-      navigate('http://localhost:5000/api/user/verify') 
+      navigate('https://ecombackend-8yfl.onrender.com/api/user/verify') 
     } else {
       toast.error(res.data.message || "Kuch galti hui")
     }

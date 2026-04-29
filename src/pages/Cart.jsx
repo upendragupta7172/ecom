@@ -19,7 +19,7 @@ const Cart = () => {
   const [discount, setDiscount] = useState(0);
   const [appliedCode, setAppliedCode] = useState("");
 
-  const API_URL = "http://localhost:5000/api/v1/cart";
+  const API_URL = "https://ecombackend-8yfl.onrender.com/api/v1/cart";
   const config = {
     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     withCredentials: true,

@@ -9,7 +9,7 @@ const OrderSuccess = () => {
 
   const downloadInvoice = () => {
     // Backend API trigger karein
-    window.open(`http://localhost:5000/api/v1/payment/invoice/${orderId}`, "_blank");
+    window.open(`https://ecombackend-8yfl.onrender.com/api/v1/payment/invoice/${orderId}`, "_blank");
   };
 
   return (

@@ -9,7 +9,7 @@ const OrderDetails = () => {
   const fetchOrder = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5000/api/v1/orders/${id}`,
+        `https://ecombackend-8yfl.onrender.com/api/v1/orders/${id}`,
         { 
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           withCredentials: true 

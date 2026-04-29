@@ -10,7 +10,7 @@ const VarifyEmail = () => {
 
   const varifyEmail = async () => {
     try {
-      const res = await axios.post('http://localhost:5000/api/user/varify', {}, {
+      const res = await axios.post('https://ecombackend-8yfl.onrender.com/api/user/varify', {}, {
         headers: {
           Authorization: `Bearer ${token}`
         }

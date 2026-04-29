@@ -9,7 +9,7 @@ const MyOrders = () => {
     const fetchOrders = async () => {
         try {
             const res = await axios.get(
-                "http://localhost:5000/api/user/my",
+                "https://ecombackend-8yfl.onrender.com/api/user/my",
                 { 
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
                     withCredentials: true 
@@ -28,7 +28,7 @@ const MyOrders = () => {
     const cancelOrder = async (id) => {
   try {
     const res = await axios.put(
-      `http://localhost:5000/api/v1/orders/cancel/${id}`,
+      `https://ecombackend-8yfl.onrender.com/api/v1/orders/cancel/${id}`,
       {},
       { 
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

@@ -22,7 +22,7 @@ const AdminOrders = () => {
             }
 
             const res = await axios.get( // Ensure this is the correct URL for your local backend
-                "http://localhost:5000/api/v1/orders/admin/all", // Use relative path for deployment
+                "https://ecombackend-8yfl.onrender.com/api/v1/orders/admin/all", // Use relative path for deployment
                 {
                     headers: { Authorization: `Bearer ${token}` }, // Attach the token here
                     withCredentials: true // Important if your backend uses cookies for session management

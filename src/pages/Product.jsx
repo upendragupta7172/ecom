@@ -23,7 +23,7 @@ const Product = () => {
   const getProducts = async () => {
     try {
       setLoading(true)
-      const res = await axios.get("http://localhost:5000/api/user/product/getallproducts")
+      const res = await axios.get("https://ecombackend-8yfl.onrender.com/api/user/product/getallproducts")
 
       if (res.data?.products) {
         dispatch(setProducts(res.data.products))

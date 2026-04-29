@@ -112,7 +112,7 @@ const App = () => {
         const token = localStorage.getItem('token');
         if (token) {
           // Token ko header mein bhej rahe hain kyunki isAuthenticated middleware check karta hai
-          const res = await axios.get('http://localhost:5000/api/v1/cart/get', {
+          const res = await axios.get('https://ecombackend-8yfl.onrender.com/api/v1/cart/get', {
             headers: { "Authorization": `Bearer ${token}` }
           });
           if (res.data.success) dispatch(setCart(res.data.items || []));

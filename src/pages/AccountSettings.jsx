@@ -58,7 +58,7 @@ const AccountSettings = () => {
       setLoading(true);
 
       const res = await axios.put(
-        "http://localhost:5000/api/user/profile/update",
+        "https://ecombackend-8yfl.onrender.com/api/user/profile/update",
         // "/api/user/profile/update",
 
         {
