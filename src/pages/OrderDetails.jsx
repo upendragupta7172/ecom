@@ -6,27 +6,35 @@ const OrderDetails = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
 
-  const fetchOrder = async () => {
-    try {
-      const res = await axios.get(
-        `/api/v1/orders/${id}`,
-        { 
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-          withCredentials: true 
-        }
-      );
-
-      if (res.data.success) {
-        setOrder(res.data.order);
-      }
-    } catch (error) {
-      console.log("Error fetching order");
-    }
-  };
-
   useEffect(() => {
-    fetchOrder();
-  }, []);
+    let ignore = false;
+
+    const loadOrder = async () => {
+      try {
+        const res = await axios.get(
+          `/api/v1/orders/${id}`,
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            withCredentials: true
+          }
+        );
+
+        if (!ignore && res.data.success) {
+          setOrder(res.data.order);
+        }
+      } catch (error) {
+        if (!ignore) {
+          console.error("Error fetching order", error);
+        }
+      }
+    };
+
+    void loadOrder();
+
+    return () => {
+      ignore = true;
+    };
+  }, [id]);
 
   if (!order) return <p className="pt-28 text-center">Loading...</p>;
 
@@ -37,8 +45,6 @@ const OrderDetails = () => {
   return (
     <div className="pt-28 px-6 bg-gray-50 min-h-screen">
       <div className="max-w-5xl mx-auto bg-white p-6 rounded-xl shadow">
-
-        {/* HEADER */}
         <div className="flex justify-between border-b pb-4 mb-4">
           <div>
             <p className="text-sm text-gray-500">Order ID</p>
@@ -51,57 +57,50 @@ const OrderDetails = () => {
           </div>
         </div>
 
-        {/* USER INFO */}
         <div className="mb-6">
           <h2 className="text-lg font-semibold mb-2">Customer</h2>
-          <p>{order.userId?.name}</p>
+          <p>{[order.userId?.firstName, order.userId?.lastName].filter(Boolean).join(" ") || "Customer"}</p>
           <p className="text-sm text-gray-500">{order.userId?.email}</p>
         </div>
 
-        {/* PRODUCTS */}
         <div>
           <h2 className="text-lg font-semibold mb-3">Products</h2>
 
           <div className="space-y-4">
-            {order.products.map((p, i) => (
+            {order.products.map((product, index) => (
               <div
-                key={i}
+                key={index}
                 className="flex items-center justify-between border p-3 rounded-lg"
               >
                 <div className="flex items-center gap-4">
-
-                  {/* IMAGE */}
                   <img
-                    src={p.productId?.productImg?.[0]?.url}
-                    alt=""
+                    src={product.productId?.productImg?.[0]?.url}
+                    alt={product.productId?.productName || "Product"}
                     className="w-16 h-16 object-cover rounded"
                   />
 
                   <div>
                     <p className="font-medium">
-                      {p.productId?.productName}
+                      {product.productId?.productName}
                     </p>
                     <p className="text-sm text-gray-500">
-                      Qty: {p.quantity}
+                      Qty: {product.quantity}
                     </p>
                   </div>
                 </div>
 
                 <p className="font-semibold">
-                  ₹
-                  {(p.productId?.productPrice || 0) * p.quantity}
+                  Rs. {(product.productId?.productPrice || 0) * product.quantity}
                 </p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* TOTAL */}
         <div className="border-t mt-6 pt-4 flex justify-between text-lg font-bold">
           <span>Total</span>
-          <span className="text-green-600">₹{total}</span>
+          <span className="text-green-600">Rs. {total}</span>
         </div>
-
       </div>
     </div>
   );

@@ -1,28 +1,42 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "@/api/axios";
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
 
-  // Fetch products
   useEffect(() => {
+    let ignore = false;
+
     const fetchProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/products");
-        setProducts(res.data);
+        const res = await axios.get("/api/user/product/getallproducts");
+        if (!ignore) {
+          setProducts(res.data.products || []);
+        }
       } catch (err) {
-        console.error(err);
+        if (!ignore) {
+          console.error(err);
+        }
       }
     };
-    fetchProducts();
+
+    void fetchProducts();
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
-  // Delete product
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
       try {
-        await axios.delete(`http://localhost:5000/products/${id}`);
-        setProducts(products.filter((p) => p._id !== id)); // update UI
+        const token = localStorage.getItem("token");
+        await axios.delete(`/api/user/product/delete/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setProducts((currentProducts) =>
+          currentProducts.filter((product) => product._id !== id)
+        );
         alert("Product deleted successfully");
       } catch (err) {
         console.error(err);
@@ -38,13 +52,13 @@ const ProductList = () => {
         <p>No products found.</p>
       ) : (
         <ul>
-          {products.map((p) => (
-            <li key={p._id}>
-              <strong>{p.title}</strong> - ₹{Number(p.price).toLocaleString()}
+          {products.map((product) => (
+            <li key={product._id}>
+              <strong>{product.productName}</strong> - Rs.{Number(product.productPrice).toLocaleString()}
               <br />
-              {p.description}
+              {product.productDesc}
               <br />
-              <button onClick={() => handleDelete(p._id)}>Delete</button>
+              <button onClick={() => handleDelete(product._id)}>Delete</button>
               <hr />
             </li>
           ))}

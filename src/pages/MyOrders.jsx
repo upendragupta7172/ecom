@@ -2,54 +2,62 @@ import React, { useEffect, useState } from "react";
 import axios from "@/api/axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+
 const MyOrders = () => {
     const [orders, setOrders] = useState([]);
+    const [refreshKey, setRefreshKey] = useState(0);
     const navigate = useNavigate();
 
-    const fetchOrders = async () => {
+    const cancelOrder = async (id) => {
         try {
-            const res = await axios.get(
-                "/api/user/my",
-                { 
+            const res = await axios.put(
+                `/api/v1/orders/cancel/${id}`,
+                {},
+                {
                     headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-                    withCredentials: true 
+                    withCredentials: true
                 }
             );
 
             if (res.data.success) {
-                setOrders(res.data.orders);
+                toast.success("Order cancelled");
+                setRefreshKey((currentKey) => currentKey + 1);
             }
         } catch (error) {
-            console.log("Error fetching orders");
+            toast.error(error.response?.data?.message || "Cancel failed");
         }
     };
 
-
-    const cancelOrder = async (id) => {
-  try {
-    const res = await axios.put(
-      `/api/v1/orders/cancel/${id}`,
-      {},
-      { 
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        withCredentials: true 
-      }
-    );
-
-    if (res.data.success) {
-      toast.success("Order cancelled");
-      fetchOrders();
-    }
-  } catch (error) {
-    toast.error(error.response?.data?.message || "Cancel failed");
-  }
-};
-
     useEffect(() => {
-        fetchOrders();
-    }, []);
+        let ignore = false;
 
-    // 🔥 STATUS COLORS
+        const loadOrders = async () => {
+            try {
+                const res = await axios.get(
+                    "/api/v1/orders/my",
+                    {
+                        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                        withCredentials: true
+                    }
+                );
+
+                if (!ignore && res.data.success) {
+                    setOrders(res.data.orders);
+                }
+            } catch (error) {
+                if (!ignore) {
+                    console.error("Error fetching orders", error);
+                }
+            }
+        };
+
+        void loadOrders();
+
+        return () => {
+            ignore = true;
+        };
+    }, [refreshKey]);
+
     const getStatusColor = (status) => {
         switch (status) {
             case "Delivered":
@@ -60,12 +68,13 @@ const MyOrders = () => {
                 return "bg-purple-100 text-purple-700";
             case "Processing":
                 return "bg-yellow-100 text-yellow-700";
+            case "Cancelled":
+                return "bg-red-100 text-red-700";
             default:
                 return "bg-gray-200";
         }
     };
 
-    // 🔥 STATUS STEP BAR
     const steps = [
         "Processing",
         "Packed",
@@ -96,7 +105,6 @@ const MyOrders = () => {
                                 key={order._id}
                                 className="bg-white rounded-2xl shadow-md p-6 border hover:shadow-lg transition"
                             >
-                                {/* HEADER */}
                                 <div className="flex justify-between items-center mb-4">
                                     <div>
                                         <p className="text-sm text-gray-500">
@@ -116,96 +124,67 @@ const MyOrders = () => {
                                     </span>
                                 </div>
 
-                                {/* 🔥 STATUS TRACKER */}
-                                <div className="flex items-center justify-between mb-6">
-                                    {steps.map((step, index) => (
-                                        <div key={index} className="flex-1 text-center">
-                                            <div
-                                                className={`w-6 h-6 mx-auto rounded-full ${index <= currentStep
-                                                        ? "bg-green-500"
-                                                        : "bg-gray-300"
+                                {order.status !== "Cancelled" && (
+                                    <div className="flex items-center justify-between mb-6">
+                                        {steps.map((step, index) => (
+                                            <div key={index} className="flex-1 text-center">
+                                                <div
+                                                    className={`w-6 h-6 mx-auto rounded-full ${
+                                                        index <= currentStep ? "bg-green-500" : "bg-gray-300"
                                                     }`}
-                                            ></div>
-                                            <p className="text-xs mt-1">{step}</p>
-                                        </div>
-                                    ))}
-                                </div>
+                                                ></div>
+                                                <p className="text-xs mt-1">{step}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
 
-                                {/* PRODUCTS */}
                                 <div className="space-y-3">
-                                    {order.products.map((p, i) => (
+                                    {order.products.map((product, index) => (
                                         <div
-                                            key={i}
+                                            key={index}
                                             className="flex justify-between items-center border p-3 rounded-lg"
                                         >
                                             <div>
                                                 <p className="font-medium">
-                                                    {p.productId?.productName}
+                                                    {product.productId?.productName}
                                                 </p>
                                                 <p className="text-sm text-gray-500">
-                                                    Qty: {p.quantity}
+                                                    Qty: {product.quantity}
                                                 </p>
                                             </div>
 
                                             <p className="font-semibold text-gray-700">
-                                                ₹
-                                                {(p.productId?.productPrice || 0) * p.quantity}
+                                                Rs. {(product.productId?.productPrice || 0) * product.quantity}
                                             </p>
                                         </div>
                                     ))}
                                 </div>
 
-                                {/* TOTAL */}
                                 <div className="flex justify-between items-center mt-5 pt-4 border-t">
                                     <p className="font-semibold text-lg">Total</p>
                                     <p className="text-green-600 text-lg font-bold">
-                                        ₹{total}
+                                        Rs. {total}
                                     </p>
                                 </div>
 
-                                {/* BUTTONS */}
-                                {/* <div className="flex justify-end gap-3 mt-4">
-                                    <button className="border px-4 py-1 rounded hover:bg-gray-100 text-sm">
-                                        Track Order
-                                    </button>
+                                <div className="flex justify-end gap-3 mt-4">
+                                    {(order.status === "Processing" || order.status === "Packed") && (
+                                        <button
+                                            onClick={() => cancelOrder(order._id)}
+                                            className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 text-sm"
+                                        >
+                                            Cancel Order
+                                        </button>
+                                    )}
+
                                     <button
                                         onClick={() => navigate(`/order/${order._id}`)}
                                         className="bg-pink-600 text-white px-4 py-1 rounded hover:bg-pink-700 text-sm"
                                     >
                                         View Details
-                                    </button> */}
-
-
-                                {/* </div> */}
-
-                                {/* change */}
-
-
-                                <div className="flex justify-end gap-3 mt-4">
-
-  {/* CANCEL BUTTON */}
-  {(order.status === "Processing" || order.status === "Packed") && (
-    <button
-      onClick={() => cancelOrder(order._id)}
-      className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 text-sm"
-    >
-      Cancel Order
-    </button>
-  )}
-
-  {/* VIEW DETAILS */}
-  <button
-    onClick={() => navigate(`/order/${order._id}`)}
-    className="bg-pink-600 text-white px-4 py-1 rounded hover:bg-pink-700 text-sm"
-  >
-    View Details
-  </button>
-
-</div>
-
-
-
-
+                                    </button>
+                                </div>
                             </div>
                         );
                     })}

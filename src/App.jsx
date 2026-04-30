@@ -1,13 +1,3 @@
-// upendragupta7172_db_user
-
-// onf6j6fnFFKIq9zB
-
-
-// mongodb+srv://upendragupta7172_db_user:<db_password>@ecommercecluseter.mhvcipe.mongodb.net/?appName=ecommercecluseter
-
-
-// new
-
 import React, { useEffect } from 'react';
 import axios from "@/api/axios";
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
@@ -30,9 +20,9 @@ import Payment from './pages/Payment';
 import Orders from './admin/Orders';
 import MyOrders from './pages/MyOrders';
 import OrderDetails from './pages/OrderDetails';
+import OrderSuccess from './pages/OrderSuccess';
 import AccountSettings from './pages/AccountSettings';
 import Profile from './pages/Profile';
-// import Profile from './pages/Profile';
 
 
 const Layout = () => (
@@ -66,6 +56,7 @@ const router = createBrowserRouter([
       { path: '/admin/orders', element: <Orders /> },
       { path: '/my-orders', element: <MyOrders /> },
       { path: "/order/:id", element: <OrderDetails /> },
+      { path: "/order-success", element: <OrderSuccess /> },
 
       { path: "/profile/:id", element: <Profile /> },
 
@@ -88,7 +79,8 @@ const App = () => {
         if (token) {
           // Token ko header mein bhej rahe hain kyunki isAuthenticated middleware check karta hai
           const res = await axios.get('/api/v1/cart/get', {
-            headers: { "Authorization": `Bearer ${token}` }
+            headers: { "Authorization": `Bearer ${token}` },
+            withCredentials: true,
           });
           if (res.data.success) dispatch(setCart(res.data.items || []));
         }

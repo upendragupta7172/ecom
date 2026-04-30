@@ -1,15 +1,11 @@
-
-
-
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "@/api/axios";
 import { toast } from "sonner";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // 🔥 STATUS FLOW (REAL ECOMMERCE LOGIC)
   const statusFlow = {
     Processing: "Packed",
     Packed: "Shipped",
@@ -21,15 +17,15 @@ const Orders = () => {
     try {
       setLoading(true);
 
-      const res = await axios.get(
-        "http://localhost:5000/api/v1/orders/admin/all",
-        { withCredentials: true }
-      );
+      const res = await axios.get("/api/v1/orders/admin/all", {
+        withCredentials: true,
+      });
 
       if (res.data.success) {
         setOrders(res.data.orders);
       }
-    } catch (error) {
+    } catch (fetchError) {
+      console.error(fetchError);
       toast.error("Failed to fetch orders");
     } finally {
       setLoading(false);
@@ -37,10 +33,9 @@ const Orders = () => {
   };
 
   useEffect(() => {
-    fetchOrders();
+    void fetchOrders();
   }, []);
 
-  // 🔥 STATUS UPDATE (FLOW CONTROLLED)
   const updateStatus = async (id, currentStatus) => {
     const nextStatus = statusFlow[currentStatus];
 
@@ -48,14 +43,14 @@ const Orders = () => {
 
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/v1/orders/status/${id}`,
+        `/api/v1/orders/status/${id}`,
         { status: nextStatus },
         { withCredentials: true }
       );
 
       if (res.data.success) {
-        toast.success(`Status updated → ${nextStatus}`);
-        fetchOrders();
+        toast.success(`Status updated to ${nextStatus}`);
+        await fetchOrders();
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Update failed");
@@ -95,61 +90,55 @@ const Orders = () => {
                       key={order._id}
                       className="border-b hover:bg-gray-50 transition"
                     >
-                      {/* USER */}
                       <td className="p-4">
                         <p className="font-medium text-gray-800">
-                          {order.userId?.name}
+                          {[order.userId?.firstName, order.userId?.lastName]
+                            .filter(Boolean)
+                            .join(" ") || "Customer"}
                         </p>
                         <p className="text-xs text-gray-500">
                           {order.userId?.email}
                         </p>
                       </td>
 
-                      {/* PRODUCTS */}
                       <td className="p-4">
                         <div className="space-y-1">
-                          {order.products.map((p, i) => (
+                          {order.products.map((product, index) => (
                             <div
-                              key={i}
+                              key={index}
                               className="text-gray-700 text-sm flex gap-2"
                             >
                               <span className="font-medium">
-                                {p.productId?.productName}
+                                {product.productId?.productName}
                               </span>
                               <span className="text-gray-500">
-                                × {p.quantity}
+                                x {product.quantity}
                               </span>
                             </div>
                           ))}
                         </div>
                       </td>
 
-                      {/* AMOUNT */}
                       <td className="p-4 font-semibold text-green-600">
-                        ₹{total}
+                        Rs. {total}
                       </td>
 
-                      {/* STATUS */}
                       <td className="p-4">
                         <div className="flex flex-col gap-2">
-                          
-                          {/* Current Status */}
                           <span className="px-3 py-1 rounded-full bg-gray-200 text-sm w-fit">
                             {order.status}
                           </span>
 
-                          {/* Next Step Button */}
-                          {order.status !== "Delivered" && (
+                          {order.status !== "Delivered" && order.status !== "Cancelled" && (
                             <button
                               onClick={() =>
                                 updateStatus(order._id, order.status)
                               }
                               className="bg-purple-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-purple-700 transition"
                             >
-                              Move to → {statusFlow[order.status]}
+                              Move to {statusFlow[order.status]}
                             </button>
                           )}
-
                         </div>
                       </td>
                     </tr>
