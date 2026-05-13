@@ -1,6 +1,11 @@
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "shadcn/tailwind.css";
+/* @import "shadcn/tailwind.css"; */
 @import "@fontsource-variable/geist";
 
 @custom-variant dark (&:is(.dark *));
