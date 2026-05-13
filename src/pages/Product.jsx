@@ -310,7 +310,7 @@ const Product = () => {
 
             {/* Price */}
 
-            {/* <div className="mb-6">
+            <div className="mb-6">
 
               <div className="mb-3 flex items-center justify-between">
 
@@ -334,9 +334,9 @@ const Product = () => {
 
               <input
                 type="range"
-                min="1000"
+                min="1"
                 max="100000"
-                step="1000"
+                step="1"
                 value={filters.maxPrice}
                 onChange={(e) =>
                   setFilters({
@@ -361,7 +361,7 @@ const Product = () => {
                 <span>₹100k</span>
               </div>
 
-            </div> */}
+            </div>
 
             <Filtersidebar
               allProducts={products}
