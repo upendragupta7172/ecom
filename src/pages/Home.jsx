@@ -3,14 +3,15 @@
 import Hero from '@/components/Hero'
 import  Feature from '@/components/Feature'
 import React from 'react'
-import Productcard from '@/components/Productcard'
-  
+import Product from './Product'
+
 const Home = () => {
   return (
     <div>
      <Hero/>
      <Feature />
-     <Productcard/>
+     <Product/>
+   
     </div>
   )
 }
