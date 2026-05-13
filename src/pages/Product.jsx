@@ -310,7 +310,7 @@ const Product = () => {
 
             {/* Price */}
 
-            <div className="mb-6">
+            {/* <div className="mb-6">
 
               <div className="mb-3 flex items-center justify-between">
 
@@ -361,7 +361,7 @@ const Product = () => {
                 <span>₹100k</span>
               </div>
 
-            </div>
+            </div> */}
 
             <Filtersidebar
               allProducts={products}
@@ -475,7 +475,7 @@ const Product = () => {
 
       </div>
 
-    </div>
+    </div> 
   )
 }
 
